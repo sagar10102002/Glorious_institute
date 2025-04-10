@@ -106,6 +106,17 @@
 
     <div id="status"></div>
   </div>
+ 
+<!-- ----receipt---------------------------->  
+  <div id="receipt" style="display: none; margin-top: 30px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: #e9ffe9;">
+    <h3 style="text-align: center;">Payment Receipt</h3>
+    <p><strong>Name:</strong> <span id="rName"></span></p>
+    <p><strong>Batch:</strong> <span id="rBatch"></span></p>
+    <p><strong>Time:</strong> <span id="rTime"></span></p>
+    <p><strong>Date:</strong> <span id="rDate"></span></p>
+    <p><strong>Amount Paid:</strong> ₹<span id="rAmount"></span></p>
+  </div>
+  
 
   <script>
     const form = document.getElementById('paymentForm');
@@ -146,9 +157,21 @@
         });
 
         const result = await response.text();
-        statusDiv.textContent = result;
+        //statusDiv.textContent = result;
+        //form.reset();
+        //qrCodeDiv.innerHTML = '';
+        statusDiv.textContent = result; // for receipt starting line
+        // Show receipt
+        document.getElementById('rName').textContent = formData.get('name');
+        document.getElementById('rBatch').textContent = formData.get('batch');
+        document.getElementById('rTime').textContent = formData.get('time');
+        document.getElementById('rDate').textContent = formData.get('date');
+        document.getElementById('rAmount').textContent = amount;
+        document.getElementById('receipt').style.display = 'block';
+        // Reset form & QR code
         form.reset();
-        qrCodeDiv.innerHTML = '';
+        qrCodeDiv.innerHTML = '';      // for receipt ending line
+
       } catch (error) {
         statusDiv.textContent = 'Error submitting payment. Try again.';
         statusDiv.style.color = 'red';
@@ -158,6 +181,7 @@
     // Load QR on page load
     window.onload = () => {
       generateQR(getAmount());
+      document.getElementById('receipt').style.display = 'none'; // for receipt
     };
   </script>
 
